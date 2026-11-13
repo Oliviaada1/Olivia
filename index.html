@@ -2,32 +2,47 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olivia Design Agency - Simulation</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
     <style>
-        body { margin: 0; padding: 0; background-color: #1a1a2e; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; overflow: hidden; }
-        #game-container { display: flex; height: 100vh; }
-        #canvas-wrapper { flex: 1; position: relative; }
-        #sidebar { width: 320px; background: #16213e; padding: 15px; overflow-y: auto; border-right: 3px solid #0f3460; }
-        h2 { color: #e94560; text-align: center; margin-top: 0; font-size: 18px; }
-        button { width: 100%; padding: 10px; margin-bottom: 8px; background: #0f3460; color: white; border: 1px solid #e94560; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s; }
-        button:hover { background: #e94560; }
-        #log { background: #000; padding: 10px; height: 200px; overflow-y: auto; font-size: 11px; border-radius: 6px; border: 1px solid #444; margin-top: 10px; }
-        .log-entry { margin-bottom: 4px; color: #aaa; }
-        .log-highlight { color: #f1c40f; }
-        #instagram-panel { display: none; background: #fff; color: #333; padding: 15px; border-radius: 10px; margin-top: 10px; border: 3px solid #e1306c; }
-        #instagram-panel h3 { color: #e1306c; margin: 0 0 10px 0; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #1a1a2e; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; overflow: hidden; }
+        
+        #game-container { display: flex; height: 100vh; width: 100vw; direction: ltr; }
+        
+        /* منطقة اللعبة */
+        #canvas-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #0f0f1a; }
+        
+        /* لوحة التحكم الجانبية */
+        #sidebar { width: 320px; background: #16213e; padding: 20px; overflow-y: auto; border-left: 3px solid #0f3460; direction: rtl; flex-shrink: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10; }
+        
+        h2 { color: #e94560; text-align: center; margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid #e94560; padding-bottom: 10px; }
+        
+        button { width: 100%; padding: 12px; margin-bottom: 10px; background: #0f3460; color: white; border: 2px solid #e94560; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #e94560; transform: translateY(-2px); }
+        
+        #log { background: #000; padding: 10px; height: 250px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid #444; margin-top: 15px; }
+        .log-entry { margin-bottom: 6px; color: #aaa; line-height: 1.4; }
+        .log-highlight { color: #f1c40f; font-weight: bold; }
+        
+        /* لوحة إنستغرام */
+        #instagram-panel { display: none; background: #fff; color: #333; padding: 15px; border-radius: 10px; margin-top: 15px; border: 3px solid #e1306c; text-align: right; }
+        #instagram-panel h3 { color: #e1306c; margin-bottom: 10px; text-align: center; }
         .stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; border-bottom: 1px dashed #ccc; padding-bottom: 4px; }
         .palette { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
-        .color-box { width: 25px; height: 25px; border-radius: 4px; border: 1px solid #ccc; }
-        #progress-container { position: absolute; top: 10px; left: 10px; right: 10px; display: none; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 8px; border: 2px solid #f1c40f; z-index: 100; }
-        #progress-text { margin-bottom: 5px; text-align: center; font-weight: bold; }
+        .color-box { width: 30px; height: 30px; border-radius: 5px; border: 1px solid #ccc; }
+        
+        /* شريط التقدم */
+        #progress-container { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 400px; display: none; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 10px; border: 2px solid #f1c40f; z-index: 100; direction: rtl; }
+        #progress-text { margin-bottom: 8px; text-align: center; font-weight: bold; color: #f1c40f; }
         #progress-bar-bg { background: #333; height: 20px; border-radius: 10px; overflow: hidden; }
         #progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e94560, #f1c40f); transition: width 0.1s; }
     </style>
 </head>
 <body>
     <div id="game-container">
+        <!-- منطقة الرسم -->
         <div id="canvas-wrapper">
             <div id="progress-container">
                 <div id="progress-text">جاري تنفيذ المهمة...</div>
@@ -35,12 +50,14 @@
             </div>
             <div id="phaser-game"></div>
         </div>
+
+        <!-- لوحة التحكم -->
         <div id="sidebar">
-            <h2>🏢 Olivia Design Agency</h2>
+            <h2>🏢 Olivia Agency</h2>
             <button onclick="assignTask()">📋 توزيع مهمة جديدة</button>
             <button onclick="callMeeting()">📢 عقد الاجتماع الأسبوعي</button>
-            <button onclick="analyzeInstagram()">📸 دراسة حساب @_olivia.design_</button>
-            <button onclick="resetSim()">🔄 إعادة التشغيل</button>
+            <button onclick="analyzeInstagram()">📸 تحليل @_olivia.design_</button>
+            <button onclick="resetSim()" style="background:#c0392b; border-color:#c0392b;">🔄 إعادة التشغيل</button>
 
             <div id="instagram-panel">
                 <h3>📊 تحليل الحساب</h3>
@@ -54,38 +71,37 @@
                     <div class="color-box" style="background:#2C2C2C"></div>
                     <div class="color-box" style="background:#FFFFFF"></div>
                 </div>
-                <p style="font-size:11px; text-align:center; margin-top:10px;">التوصية: التركيز على المحتوى البصري الفاخر.</p>
             </div>
 
-            <h3 style="margin-top:20px; font-size:14px;">📝 سجل الأحداث:</h3>
+            <h3 style="margin-top:20px; font-size:14px; color:#e94560;">📝 سجل الأحداث:</h3>
             <div id="log"></div>
         </div>
     </div>
 
     <script>
-        // ============ إعدادات اللعبة ============
-        const WIDTH = 1000;
-        const HEIGHT = 700;
+        // إعدادات الشاشة
+        const GAME_WIDTH = window.innerWidth - 320; 
+        const GAME_HEIGHT = window.innerHeight;
+        
+        // الألوان
         const COLORS = [0xe94560, 0x0f3460, 0x16c79a, 0xf1c40f, 0x9b59b6, 0xe67e22];
         
-        // الغرف (الإحداثيات والبُعد)
+        // الغرف (تم تكبيرها لتجنب التداخل)
         const ROOMS = {
-            manager: { x: 30, y: 30, w: 250, h: 180, name: 'مكتب المديرة', color: 0x2c3e50 },
-            design: { x: 320, y: 30, w: 220, h: 180, name: 'التصميم', color: 0x3498db },
-            social: { x: 580, y: 30, w: 200, h: 180, name: 'السوشيال ميديا', color: 0xe1306c },
-            meeting: { x: 30, y: 250, w: 400, h: 250, name: 'قاعة الاجتماعات', color: 0xe67e22 },
-            marketing: { x: 470, y: 250, w: 310, h: 250, name: 'التسويق', color: 0x16c79a },
-            lounge: { x: 30, y: 540, w: 750, h: 130, name: 'الاستراحة', color: 0x555555 }
+            manager: { x: 20, y: 20, w: 250, h: 180, name: 'مكتب المديرة', color: 0x2c3e50 },
+            design: { x: 300, y: 20, w: 250, h: 180, name: 'قسم التصميم', color: 0x3498db },
+            social: { x: 580, y: 20, w: 250, h: 180, name: 'السوشيال ميديا', color: 0xe1306c },
+            meeting: { x: 20, y: 230, w: 400, h: 250, name: 'قاعة الاجتماعات', color: 0xe67e22 },
+            marketing: { x: 450, y: 230, w: 380, h: 250, name: 'قسم التسويق', color: 0x16c79a },
+            lounge: { x: 20, y: 510, w: 810, h: 130, name: 'الاستراحة', color: 0x555555 }
         };
 
-        // ============ المتغيرات ============
         let gameScene;
         let employees = [];
         let managerSprite;
-        let paths = [];
         let currentTask = null;
 
-        // ============ واجهة السجل ============
+        // واجهة السجل
         function addLog(msg, highlight = false) {
             const logDiv = document.getElementById('log');
             const entry = document.createElement('div');
@@ -96,7 +112,7 @@
             logDiv.scrollTop = logDiv.scrollHeight;
         }
 
-        // ============ فئة الموظف ============
+        // فئة الموظف
         class Employee {
             constructor(scene, x, y, name, dept, color) {
                 this.scene = scene;
@@ -107,25 +123,24 @@
                 this.homeY = y;
                 this.isMoving = false;
                 
-                // جسم الموظف
+                // رسم الموظف
                 this.container = scene.add.container(x, y);
-                const body = scene.add.circle(0, 0, 14, color);
+                const body = scene.add.circle(0, 0, 12, color);
                 body.setStrokeStyle(2, 0xffffff);
-                const head = scene.add.circle(0, -12, 7, 0xffdbac);
+                const head = scene.add.circle(0, -10, 6, 0xffdbac);
                 head.setStrokeStyle(1, 0x000000);
-                const label = scene.add.text(0, 20, name, { fontSize: '10px', color: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+                const label = scene.add.text(0, 18, name, { fontSize: '9px', color: '#fff', fontStyle: 'bold', backgroundColor: 'rgba(0,0,0,0.5)', padding: {x:2, y:2} }).setOrigin(0.5);
                 
                 this.container.add([body, head, label]);
                 scene.physics.add.existing(this.container);
-                this.container.body.setCircle(14);
+                this.container.body.setCircle(12);
                 this.container.body.setCollideWorldBounds(true);
                 
-                this.path = [];
                 this.target = null;
+                this.callback = null;
             }
 
             moveTo(targetX, targetY, callback) {
-                if (this.isMoving) return;
                 this.isMoving = true;
                 this.target = { x: targetX, y: targetY };
                 this.callback = callback;
@@ -152,11 +167,9 @@
             }
         }
 
-        // ============ مشهد اللعبة ============
+        // المشهد الرئيسي
         class MainScene extends Phaser.Scene {
-            constructor() {
-                super('MainScene');
-            }
+            constructor() { super('MainScene'); }
 
             create() {
                 gameScene = this;
@@ -165,35 +178,32 @@
                 // رسم الغرف
                 Object.keys(ROOMS).forEach(key => {
                     const r = ROOMS[key];
-                    const rect = this.add.rectangle(r.x + r.w/2, r.y + r.h/2, r.w, r.h, r.color, 0.25);
-                    rect.setStrokeStyle(3, 0xffffff, 0.6);
+                    const rect = this.add.rectangle(r.x + r.w/2, r.y + r.h/2, r.w, r.h, r.color, 0.2);
+                    rect.setStrokeStyle(3, 0xffffff, 0.5);
                     this.add.text(r.x + 10, r.y + 10, r.name, { fontSize: '14px', color: '#fff', fontStyle: 'bold' });
                 });
 
-                // رسم مكتب المدير (مفصل)
+                // رسم مكتب المديرة
                 const m = ROOMS.manager;
-                // مكتب خشبي
-                this.add.rectangle(m.x + 80, m.y + 120, 100, 40, 0x8B4513).setStrokeStyle(2, 0x000000);
-                // كرسي المدير
-                this.add.circle(m.x + 80, m.y + 90, 15, 0x000000);
-                // زجاج
-                this.add.rectangle(m.x + 125, m.y + 180, 40, 4, 0x88ccff, 0.6);
-                // اسم المديرة
+                this.add.rectangle(m.x + 80, m.y + 120, 100, 40, 0x8B4513).setStrokeStyle(2, 0x000000); // مكتب
+                this.add.circle(m.x + 80, m.y + 90, 15, 0x000000); // كرسي
+                this.add.rectangle(m.x + 125, m.y + 180, 40, 4, 0x88ccff, 0.6); // زجاج
                 this.add.text(m.x + 80, m.y + 145, 'Olivia', { fontSize: '11px', color: '#f1c40f', fontStyle: 'bold' }).setOrigin(0.5);
 
-                // إنشاء المديرة في مكتبها
+                // المديرة
                 managerSprite = new Employee(this, m.x + 80, m.y + 90, 'Olivia 👑', 'manager', 0xf1c40f);
                 employees.push(managerSprite);
 
-                // إنشاء 30 موظف
+                // الموظفون
                 const depts = ['design', 'social', 'marketing'];
                 const names = ['أحمد','سارة','محمد','نورة','خالد','مريم','علي','فاطمة','يوسف','ليلى','راشد','هند','عمر','دانة','سلمان','شهد','طلال','ريم','بدر','لمى','ناصر','منى','تركي','جواهر','سعد','عبير','ماجد','أمل','فيصل','عبير'];
                 
                 for (let i = 0; i < 30; i++) {
                     const dept = depts[i % 3];
                     const room = ROOMS[dept];
-                    const x = room.x + 30 + Math.random() * (room.w - 60);
-                    const y = room.y + 50 + Math.random() * (room.h - 80);
+                    // توزيع عشوائي أوسع لتجنب التداخل
+                    const x = room.x + 40 + Math.random() * (room.w - 80);
+                    const y = room.y + 50 + Math.random() * (room.h - 100);
                     const emp = new Employee(this, x, y, names[i], dept, COLORS[i % COLORS.length]);
                     employees.push(emp);
                 }
@@ -203,22 +213,22 @@
             }
 
             update() {
-                employees.forEach(emp => emp.update(emp.name.includes('Olivia') ? 90 : 120));
+                employees.forEach(emp => emp.update(120));
             }
         }
 
-        // ============ تشغيل اللعبة ============
+        // تشغيل اللعبة
         const config = {
             type: Phaser.AUTO,
-            width: WIDTH,
-            height: HEIGHT,
+            width: GAME_WIDTH,
+            height: GAME_HEIGHT,
             parent: 'phaser-game',
             physics: { default: 'arcade' },
             scene: MainScene
         };
         const game = new Phaser.Game(config);
 
-        // ============ وظائف التفاعل ============
+        // ==== التفاعل ====
         function assignTask() {
             if (!gameScene || currentTask) return;
             
@@ -230,16 +240,14 @@
             if (deptEmps.length === 0) return;
             
             const emp = deptEmps[Math.floor(Math.random() * deptEmps.length)];
-            const duration = Math.floor(Math.random() * 20) + 10; // 10 إلى 30 ثانية
+            const duration = Math.floor(Math.random() * 20) + 10;
             const taskName = dept === 'design' ? 'تصميم هوية بصرية' : dept === 'social' ? 'جدولة منشورات' : 'حملة إعلانية';
             
             addLog(`📋 تم تكليف ${emp.name} بمهمة: ${taskName} (${duration} ثانية)`, true);
             
-            // نقل الموظف لمكان العمل
-            const targetX = room.x + 60;
-            const targetY = room.y + room.h - 60;
+            const targetX = room.x + 50;
+            const targetY = room.y + room.h - 50;
             emp.moveTo(targetX, targetY, () => {
-                // بدء شريط التقدم
                 currentTask = { emp, duration, elapsed: 0, name: taskName };
                 const pc = document.getElementById('progress-container');
                 const pf = document.getElementById('progress-bar-fill');
@@ -256,15 +264,15 @@
             
             employees.forEach(emp => {
                 const m = ROOMS.meeting;
-                const tx = m.x + 50 + Math.random() * (m.w - 100);
-                const ty = m.y + 50 + Math.random() * (m.h - 100);
+                const tx = m.x + 40 + Math.random() * (m.w - 80);
+                const ty = m.y + 40 + Math.random() * (m.h - 80);
                 emp.moveTo(tx, ty, () => {
                     if (emp.name.includes('Olivia')) {
                         addLog('✅ الجميع في قاعة الاجتماعات. بدء الاجتماع.', true);
                         setTimeout(() => {
-                            addLog('🗣️ مناقشة تحليل SWOT: قوة في التصميم، ضعف في الميزانية.', false);
+                            addLog('🗣️ مناقشة SWOT: قوة في التصميم، ضعف في الميزانية.', false);
                             setTimeout(() => {
-                                addLog('🔚 انتهى الاجتماع. عودة الموظفين للمكاتب.');
+                                addLog('🔚 انتهى الاجتماع. العودة للمكاتب.');
                                 employees.forEach(e => e.moveTo(e.homeX, e.homeY));
                             }, 2500);
                         }, 1500);
@@ -278,17 +286,15 @@
             addLog('📸 جاري دراسة حساب @_olivia.design_...', true);
             addLog('👥 فريق السوشيال ميديا والمديرة يتوجهون للاجتماع.', true);
             
-            // المديرة + فريق السوشيال يذهبون للقاعة
             const m = ROOMS.meeting;
             const socialTeam = employees.filter(e => e.dept === 'social' || e.name.includes('Olivia'));
             
             socialTeam.forEach(emp => {
-                const tx = m.x + 50 + Math.random() * (m.w - 100);
-                const ty = m.y + 50 + Math.random() * (m.h - 100);
+                const tx = m.x + 40 + Math.random() * (m.w - 80);
+                const ty = m.y + 40 + Math.random() * (m.h - 80);
                 emp.moveTo(tx, ty);
             });
             
-            // شريط تحميل لمدة 5 ثوان
             const pc = document.getElementById('progress-container');
             const pf = document.getElementById('progress-bar-fill');
             const pt = document.getElementById('progress-text');
@@ -310,11 +316,9 @@
             }, 100);
         }
 
-        function resetSim() {
-            location.reload();
-        }
+        function resetSim() { location.reload(); }
 
-        // ============ حلقة تحديث شريط التقدم ============
+        // تحديث شريط التقدم
         setInterval(() => {
             if (currentTask) {
                 currentTask.elapsed += 0.1;
@@ -326,12 +330,10 @@
                     const emp = currentTask.emp;
                     currentTask = null;
                     document.getElementById('progress-container').style.display = 'none';
-                    // عودة الموظف لمكانه
                     emp.moveTo(emp.homeX, emp.homeY);
                 }
             }
         }, 100);
-
     </script>
 </body>
 </html>
