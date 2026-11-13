@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olivia Design Agency - Simulation</title>
+    <title>Olivia Design Agency - Advanced Simulation</title>
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -12,86 +12,87 @@
         #game-container { display: flex; height: 100vh; width: 100vw; direction: ltr; }
         #canvas-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #0f0f1a; }
         
-        #sidebar { width: 340px; background: #16213e; padding: 20px; overflow-y: auto; border-left: 3px solid #0f3460; direction: rtl; flex-shrink: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10; }
+        /* الشريط الجانبي الأيمن (التحكم) */
+        #sidebar-right { width: 280px; background: #16213e; padding: 20px; overflow-y: auto; border-left: 3px solid #0f3460; direction: rtl; flex-shrink: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10; }
+        
+        /* الشريط الجانبي الأيسر (مركز التقارير) */
+        #sidebar-left { width: 350px; background: #1a1a2e; padding: 20px; overflow-y: auto; border-right: 3px solid #e94560; direction: rtl; flex-shrink: 0; box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 10; display: flex; flex-direction: column; }
         
         h2 { color: #e94560; text-align: center; margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid #e94560; padding-bottom: 10px; }
+        h3 { color: #f1c40f; font-size: 16px; margin-bottom: 10px; }
         
         button { width: 100%; padding: 12px; margin-bottom: 10px; background: #0f3460; color: white; border: 2px solid #e94560; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
         button:hover { background: #e94560; transform: translateY(-2px); }
         
-        #log { background: #000; padding: 10px; height: 200px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid #444; margin-top: 15px; }
-        .log-entry { margin-bottom: 6px; color: #aaa; line-height: 1.4; }
+        #log { background: #000; padding: 10px; height: 150px; overflow-y: auto; font-size: 11px; border-radius: 8px; border: 1px solid #444; margin-top: 10px; }
+        .log-entry { margin-bottom: 6px; color: #aaa; line-height: 1.3; }
         .log-highlight { color: #f1c40f; font-weight: bold; }
-        
-        /* شريط التقدم */
-        #progress-container { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 400px; display: none; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 10px; border: 2px solid #f1c40f; z-index: 100; direction: rtl; }
-        #progress-text { margin-bottom: 8px; text-align: center; font-weight: bold; color: #f1c40f; }
-        #progress-bar-bg { background: #333; height: 20px; border-radius: 10px; overflow: hidden; }
-        #progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e94560, #f1c40f); transition: width 0.1s; }
 
-        /* نافذة النتائج (Modal) */
-        #modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 200; justify-content: center; align-items: center; direction: rtl; }
-        #modal-content { background: #fff; color: #333; width: 600px; max-width: 90%; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 6px solid #e94560; position: relative; }
-        #modal-title { color: #e94560; margin-bottom: 15px; font-size: 22px; border-bottom: 2px dashed #eee; padding-bottom: 10px; }
-        #modal-body { font-size: 15px; line-height: 1.7; max-height: 400px; overflow-y: auto; }
-        #modal-body h4 { color: #0f3460; margin-top: 15px; margin-bottom: 5px; }
-        #modal-body ul { padding-right: 20px; margin-bottom: 10px; }
-        #modal-body li { margin-bottom: 5px; }
-        .close-btn { position: absolute; top: 15px; left: 15px; background: #e94560; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .close-btn:hover { background: #c0392b; }
-        .badge { display: inline-block; background: #e94560; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px; margin-bottom: 10px; }
+        /* مركز التقارير */
+        #reports-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .report-card { background: #fff; color: #333; padding: 15px; border-radius: 10px; border-right: 6px solid #e94560; box-shadow: 0 4px 10px rgba(0,0,0,0.3); animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        .report-title { font-weight: bold; color: #0f3460; font-size: 15px; }
+        .report-emp { font-size: 12px; background: #e94560; color: white; padding: 2px 6px; border-radius: 4px; }
+        .report-body { font-size: 13px; line-height: 1.6; }
+        .report-body ul { padding-right: 20px; margin-top: 5px; margin-bottom: 5px; }
+        .manager-note { background: #fff3cd; border-right: 4px solid #f1c40f; padding: 8px; margin-top: 10px; color: #856404; font-size: 12px; border-radius: 4px; font-style: italic; }
+        
+        .badge { display: inline-block; background: #2980b9; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="canvas-wrapper">
-            <div id="progress-container">
-                <div id="progress-text">جاري تنفيذ المهمة...</div>
-                <div id="progress-bar-bg"><div id="progress-bar-fill"></div></div>
-            </div>
-            <div id="phaser-game"></div>
-
-            <!-- نافذة عرض النتائج -->
-            <div id="modal-overlay">
-                <div id="modal-content">
-                    <button class="close-btn" onclick="closeModal()">X</button>
-                    <h2 id="modal-title">النتيجة</h2>
-                    <div id="modal-body"></div>
-                </div>
-            </div>
+        
+        <!-- الشريط الجانبي الأيمن (التحكم) -->
+        <div id="sidebar-right">
+            <h2>🎨 Olivia Agency</h2>
+            <button id="btn-task" onclick="assignTask()">📋 إطلاق مهمة جديدة</button>
+            <button id="btn-meeting" onclick="callMeeting()" style="background:#e67e22; border-color:#e67e22;">📢 اجتماع طارئ مع المديرة</button>
+            <button id="btn-comp" onclick="analyzeCompetitors()" style="background:#2980b9; border-color:#3498db;">🔍 تحليل الحسابات المنافسة</button>
+            <button id="btn-advice" onclick="getInstagramAdvice()" style="background:#8e44ad; border-color:#9b59b6;">💡 نصائح لتطوير الحساب</button>
+            
+            <h3 style="margin-top:20px;">📝 سجل الأحداث المباشر:</h3>
+            <div id="log"></div>
         </div>
 
-        <div id="sidebar">
-            <h2>🎨 Olivia Agency</h2>
-            <button onclick="assignTask()">📋 تنفيذ مهمة جديدة (رؤية النتيجة)</button>
-            <button onclick="getInstagramAdvice()" style="background:#8e44ad; border-color:#9b59b6;">💡 اقتراحات لتحسين الحساب</button>
-            <button onclick="callMeeting()">📢 عقد الاجتماع الأسبوعي</button>
-            <button onclick="resetSim()" style="background:#c0392b; border-color:#c0392b;">🔄 إعادة التشغيل</button>
+        <!-- منطقة اللعبة -->
+        <div id="canvas-wrapper">
+            <div id="phaser-game"></div>
+        </div>
 
-            <h3 style="margin-top:20px; font-size:14px; color:#e94560;">📝 سجل الأحداث:</h3>
-            <div id="log"></div>
+        <!-- الشريط الجانبي الأيسر (مركز التقارير) -->
+        <div id="sidebar-left">
+            <h2>📊 مركز التقارير</h2>
+            <div id="reports-container">
+                <p style="color:#777; text-align:center; font-size:12px; margin-top:20px;">قم بتشغيل المهام لترى النتائج هنا...</p>
+            </div>
         </div>
     </div>
 
     <script>
-        const GAME_WIDTH = window.innerWidth - 340; 
+        const GAME_WIDTH = window.innerWidth - 630; // 280 يمين + 350 يسار
         const GAME_HEIGHT = window.innerHeight;
         
         const COLORS = [0xe94560, 0x0f3460, 0x16c79a, 0xf1c40f, 0x9b59b6, 0xe67e22];
         
         const ROOMS = {
-            manager: { x: 20, y: 20, w: 250, h: 180, name: 'مكتب المديرة', color: 0x2c3e50 },
-            design: { x: 300, y: 20, w: 250, h: 180, name: 'قسم التصميم', color: 0x3498db },
-            social: { x: 580, y: 20, w: 250, h: 180, name: 'السوشيال ميديا', color: 0xe1306c },
-            meeting: { x: 20, y: 230, w: 400, h: 250, name: 'قاعة الاجتماعات', color: 0xe67e22 },
-            marketing: { x: 450, y: 230, w: 380, h: 250, name: 'قسم المبيعات والطباعة', color: 0x16c79a },
-            lounge: { x: 20, y: 510, w: 810, h: 130, name: 'الاستراحة', color: 0x555555 }
+            manager: { x: 20, y: 20, w: 180, h: 150, name: 'مكتب المديرة', color: 0x2c3e50 },
+            design: { x: 220, y: 20, w: 180, h: 150, name: 'قسم التصميم', color: 0x3498db },
+            social: { x: 420, y: 20, w: 180, h: 150, name: 'السوشيال ميديا', color: 0xe1306c },
+            meeting: { x: 20, y: 190, w: 280, h: 200, name: 'قاعة الاجتماعات', color: 0xe67e22 },
+            marketing: { x: 320, y: 190, w: 280, h: 200, name: 'المبيعات والطباعة', color: 0x16c79a },
+            lounge: { x: 20, y: 410, w: 580, h: 100, name: 'الاستراحة', color: 0x555555 }
         };
 
         let gameScene;
         let employees = [];
-        let currentTask = null;
-        let activeAdvice = null;
+        let activeTasks = [];
+        let managerSprite;
+
+        // ==== دالة توليد عشوائي ====
+        function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
         function addLog(msg, highlight = false) {
             const logDiv = document.getElementById('log');
@@ -103,110 +104,54 @@
             logDiv.scrollTop = logDiv.scrollHeight;
         }
 
-        // ==== بنك الأفكار والنتائج (هنا يظهر "الذكاء") ====
-        const TASK_OUTCOMES = [
-            {
-                dept: 'design', name: 'اختراع فكرة فيديو (Reel)', act: 'جاري كتابة السيناريو...', icon: '🎬',
-                title: 'نتيجة: فكرة فيديو ريلز للخط العربي',
-                result: `
-                    <span class="badge">فيديو Reels - 15 ثانية</span>
-                    <h4>🎥 الفكرة:</h4>
-                    <p>فيديو سريع يوضح تحول قطعة ورق بيضاء عادية إلى بطاقة دعوة فاخرة بخط عربي مرسوم يدوياً.</p>
-                    <h4>📝 السيناريو (مشهد بمشهد):</h4>
-                    <ul>
-                        <li><b>الثانية 0-3:</b> لقطة قريبة جداً لورقة بيضاء، ثم تظهر يد تمسك بالقلم.</li>
-                        <li><b>الثانية 3-7:</b> تسريع (Time-lapse) لرسم حرف "ع" بخط الثلث بطريقة انسيابية.</li>
-                        <li><b>الثانية 7-12:</b> إضافة اللمسات الذهبية (Gold Foil) على الحرف.</li>
-                        <li><b>الثانية 12-15:</b> ظهور البطاقة النهائية على خلفية بيج، مع شعار @_olivia.design_.</li>
-                    </ul>
-                    <h4>🎵 الموسيقى المقترحة:</h4>
-                    <p>موسيقى هادئة (Lo-Fi Arabic) تعطي طابع الفخامة والهدوء.</p>
-                `
-            },
-            {
-                dept: 'marketing', name: 'تسعير منتج جديد (بوكس هدايا)', act: 'جاري حساب التكلفة والهامش...', icon: '💰',
-                title: 'نتيجة: استراتيجية تسعير بوكس الهدايا',
-                result: `
-                    <span class="badge">تحليل مالي</span>
-                    <h4>📦 المنتج: بوكس هدايا (بطاقة + شمعة + خط عربي مخصص)</h4>
-                    <h4>💵 التكلفة المباشرة:</h4>
-                    <ul>
-                        <li>المواد الخام (ورق، شمع، تغليف): 15 د.ل</li>
-                        <li>وقت العمل (ساعتان): 10 د.ل</li>
-                        <li>الإجمالي: 25 د.ل</li>
-                    </ul>
-                    <h4>📊 هامش الربح المقترح:</h4>
-                    <p>هامش 60% ليغطي مصاريف الشحن والتسويق. <br> <b>سعر البيع النهائي: 40 د.ل</b>.</p>
-                    <h4>💡 نصيحة تسويقية:</h4>
-                    <p>اعرضي المنتج كـ "هدية شخصية لا تُنسى" وليس مجرد "بوكس". استخدمي صورة الفيديو للترويج.</p>
-                `
-            },
-            {
-                dept: 'social', name: 'دراسة تحسين التفاعل', act: 'جاري تحليل البيانات...', icon: '📈',
-                title: 'نتيجة: خطة زيادة التفاعل',
-                result: `
-                    <span class="badge">نمو الحساب</span>
-                    <h4>📉 المشكلة الحالية:</h4>
-                    <p>معدل التفاعل جيد (6.2%) لكن عدد المتابعين (224) يحتاج لدفعة قوية.</p>
-                    <h4>🚀 خطة العمل:</h4>
-                    <ul>
-                        <li>إضافة "زر دعوة للتفاعل" (Call to Action) في نهاية كل منشور، مثل: "ما رأيك في هذا الخط؟".</li>
-                        <li>استخدام "الستوريز" بشكل يومي لعرض كواليس العمل (Behind the Scenes).</li>
-                        <li>عمل مسابقة: "اطلب خطك المفضل وسنصممه لك مجاناً" مقابل مشاركة المنشور.</li>
-                    </ul>
-                    <h4>⏰ أفضل وقت للنشر:</h4>
-                    <p>بناءً على التحليل: الأحد والثلاثاء الساعة 8:30 مساءً.</p>
-                `
-            },
-            {
-                dept: 'design', name: 'تصميم هوية بصرية', act: 'جاري اختيار الألوان...', icon: '🎨',
-                title: 'نتيجة: لوحة الألوان والخطوط',
-                result: `
-                    <span class="badge">هوية بصرية</span>
-                    <h4>🎨 الألوان المعتمدة:</h4>
-                    <p>الوردي الفاتح (#FADADD) + الذهبي (#D4AF37) + الأسود (#2C2C2C) + البيج (#F5F5DC).</p>
-                    <h4>✒️ الخطوط:</h4>
-                    <ul>
-                        <li>للعناوين: خط "الثلث" أو "الديواني" لإعطاء طابع فخم.</li>
-                        <li>للنصوص: خط "كايرو" أو "تجوال" لسهولة القراءة.</li>
-                    </ul>
-                `
-            }
-        ];
+        // ==== مولّد البيانات العشوائية (الذكاء) ====
+        const IDEAS = {
+            videoThemes: ['تحول الورق العادي إلى تحفة فنية', 'رسم اسم العميل بخط اليد في 10 ثواني', 'كواليس تجهيز بوكس هدايا فاخر', 'مقارنة بين الخط الكوفي والديواني', 'طريقة تغليف هدية التخرج'],
+            videoMusic: ['Lo-Fi هادئة', 'عود عربي هادئ', 'بيانو حزين وفخم', 'موسيقى صعود (Trending)'],
+            cardTypes: ['بطاقة تخرج ذهبية', 'دعوة زفاف بخط الثلث', 'بطاقة شكر للمعلمين', 'لوحة خط عربي للجدران'],
+            cardMaterials: ['ورق قطني فاخر', 'ورق كرافت طبيعي', 'ورق مقوى لامع', 'جلد صناعي للغلاف'],
+            priceItems: ['بوكس هدايا (بطاقة + شمعة)', 'تغليف هدية تخرج', 'لوحة خط عربي 30x40', 'بطاقة مناسبات مخصصة'],
+            competitors: [
+                { name: '@design_by_sara', followers: 12500, type: 'تصميم جرافيك عام', weakness: 'لا يهتم بالخط العربي' },
+                { name: '@luxury_cards_ly', followers: 8400, type: 'بطاقات فاخرة', weakness: 'أسعارهم مرتفعة جداً' },
+                { name: '@art_arabic', followers: 22000, type: 'لوحات خط', weakness: 'لا يقدمون باقات هدايا' },
+                { name: '@graduation_gifts_libya', followers: 5600, type: 'هدايا تخرج', weakness: 'التصميم مكرر وغير مخصص' }
+            ]
+        };
 
         class Employee {
             constructor(scene, x, y, name, dept, color) {
                 this.scene = scene;
                 this.name = name;
                 this.dept = dept;
-                this.color = color;
                 this.homeX = x;
                 this.homeY = y;
                 this.isMoving = false;
+                this.isWorking = false;
                 
                 this.container = scene.add.container(x, y);
-                const body = scene.add.rectangle(0, 0, 18, 22, color);
+                const body = scene.add.rectangle(0, 0, 14, 18, color);
                 body.setStrokeStyle(2, 0x000000);
-                const head = scene.add.circle(0, -18, 9, 0xffdbac);
+                const head = scene.add.circle(0, -14, 7, 0xffdbac);
                 head.setStrokeStyle(2, 0x000000);
-                const hair = scene.add.rectangle(0, -25, 18, 8, 0x2C2C2C);
+                const hair = scene.add.rectangle(0, -20, 14, 6, 0x2C2C2C);
                 hair.setStrokeStyle(1, 0x000000);
-                const label = scene.add.text(0, 30, name, { fontSize: '10px', color: '#fff', fontStyle: 'bold', backgroundColor: 'rgba(0,0,0,0.7)', padding: {x:4, y:2} }).setOrigin(0.5);
+                const label = scene.add.text(0, 24, name, { fontSize: '9px', color: '#fff', fontStyle: 'bold', backgroundColor: 'rgba(0,0,0,0.7)', padding: {x:3, y:1} }).setOrigin(0.5);
                 
                 this.container.add([body, head, hair, label]);
                 scene.physics.add.existing(this.container);
-                this.container.body.setSize(22, 32);
+                this.container.body.setSize(18, 26);
                 this.container.body.setCollideWorldBounds(true);
                 
-                this.target = null;
-                this.callback = null;
-                
-                this.workBubble = scene.add.container(x, y - 45);
+                // شريط التقدم فوق الرأس
+                this.workBubble = scene.add.container(x, y - 35);
                 this.workBubble.setVisible(false);
-                const bubbleBg = scene.add.circle(0, 0, 16, 0xffffff);
-                bubbleBg.setStrokeStyle(2, 0x000000);
-                this.workBubbleText = scene.add.text(0, 0, '...', { fontSize: '14px', color: '#000' }).setOrigin(0.5);
-                this.workBubble.add([bubbleBg, this.workBubbleText]);
+                const bubbleBg = scene.add.rectangle(0, 0, 34, 10, 0x000000, 0.8);
+                bubbleBg.setStrokeStyle(1, 0xffffff);
+                this.progressBarFill = scene.add.rectangle(-16, 0, 0, 6, 0x00ff00).setOrigin(0, 0.5);
+                this.workIcon = scene.add.text(0, -12, '⚙️', { fontSize: '10px' }).setOrigin(0.5);
+                
+                this.workBubble.add([bubbleBg, this.progressBarFill, this.workIcon]);
             }
 
             moveTo(targetX, targetY, callback) {
@@ -215,10 +160,14 @@
                 this.callback = callback;
             }
 
+            updateProgress(percent) {
+                this.progressBarFill.width = 32 * (percent / 100);
+            }
+
             update(speed = 120) {
                 if (this.workBubble.visible) {
                     this.workBubble.x = this.container.x;
-                    this.workBubble.y = this.container.y - 45;
+                    this.workBubble.y = this.container.y - 35;
                 }
                 if (!this.isMoving || !this.target) return;
                 const dx = this.target.x - this.container.x;
@@ -246,15 +195,14 @@
                     const r = ROOMS[key];
                     const rect = this.add.rectangle(r.x + r.w/2, r.y + r.h/2, r.w, r.h, r.color, 0.2);
                     rect.setStrokeStyle(3, 0xffffff, 0.5);
-                    this.add.text(r.x + 10, r.y + 10, r.name, { fontSize: '14px', color: '#fff', fontStyle: 'bold' });
+                    this.add.text(r.x + 10, r.y + 10, r.name, { fontSize: '12px', color: '#fff', fontStyle: 'bold' });
                 });
 
                 const m = ROOMS.manager;
-                this.add.rectangle(m.x + 80, m.y + 120, 100, 40, 0x8B4513).setStrokeStyle(2, 0x000000);
-                this.add.circle(m.x + 80, m.y + 90, 15, 0x000000);
-                this.add.text(m.x + 80, m.y + 145, 'Olivia', { fontSize: '11px', color: '#f1c40f', fontStyle: 'bold' }).setOrigin(0.5);
+                this.add.rectangle(m.x + 60, m.y + 90, 80, 30, 0x8B4513).setStrokeStyle(2, 0x000000);
+                this.add.circle(m.x + 60, m.y + 70, 12, 0x000000);
 
-                const managerSprite = new Employee(this, m.x + 80, m.y + 90, 'Olivia 👑', 'manager', 0xf1c40f);
+                managerSprite = new Employee(this, m.x + 60, m.y + 70, 'Olivia 👑', 'manager', 0xf1c40f);
                 employees.push(managerSprite);
 
                 const depts = ['design', 'social', 'marketing'];
@@ -263,11 +211,11 @@
                 for (let i = 0; i < 30; i++) {
                     const dept = depts[i % 3];
                     const room = ROOMS[dept];
-                    const x = room.x + 40 + Math.random() * (room.w - 80);
-                    const y = room.y + 50 + Math.random() * (room.h - 100);
+                    const x = room.x + 20 + Math.random() * (room.w - 40);
+                    const y = room.y + 30 + Math.random() * (room.h - 60);
                     employees.push(new Employee(this, x, y, names[i], dept, COLORS[i % COLORS.length]));
                 }
-                addLog('✅ شركة أوليفيا جاهزة. اضغط على "تنفيذ مهمة" لرؤية النتائج.', true);
+                addLog('✅ النظام جاهز. يمكنك تشغيل مهام متعددة الآن.', true);
             }
             update() { employees.forEach(emp => emp.update(120)); }
         }
@@ -275,101 +223,182 @@
         const config = { type: Phaser.AUTO, width: GAME_WIDTH, height: GAME_HEIGHT, parent: 'phaser-game', physics: { default: 'arcade' }, scene: MainScene };
         const game = new Phaser.Game(config);
 
-        // ==== دوال التفاعل ====
-        function showModal(title, htmlContent) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-body').innerHTML = htmlContent;
-            document.getElementById('modal-overlay').style.display = 'flex';
+        // ==== إدارة التقارير ====
+        function addReportToUI(title, empName, icon, resultHTML, managerNote) {
+            const container = document.getElementById('reports-container');
+            if (container.querySelector('p')) container.innerHTML = ''; // مسح رسالة البداية
+            
+            const card = document.createElement('div');
+            card.className = 'report-card';
+            card.innerHTML = `
+                <div class="report-header">
+                    <span class="report-title">${icon} ${title}</span>
+                    <span class="report-emp">👤 ${empName}</span>
+                </div>
+                <div class="report-body">${resultHTML}</div>
+                <div class="manager-note">👑 <b>ملاحظة المديرة:</b> ${managerNote}</div>
+            `;
+            container.prepend(card);
         }
-        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
+        // ==== تنفيذ المهام ====
         function assignTask() {
-            if (!gameScene || currentTask) return;
+            if (!gameScene) return;
             
-            const task = TASK_OUTCOMES[Math.floor(Math.random() * TASK_OUTCOMES.length)];
-            const room = ROOMS[task.dept];
-            const deptEmps = employees.filter(e => e.dept === task.dept);
-            const emp = deptEmps[Math.floor(Math.random() * deptEmps.length)];
-            const duration = 5; // تسريع المهمة لرؤية النتيجة أسرع (5 ثواني)
+            const depts = ['design', 'social', 'marketing'];
+            const dept = getRandom(depts);
+            const room = ROOMS[dept];
+            const deptEmps = employees.filter(e => e.dept === dept && !e.isWorking);
             
-            addLog(`📋 تم تكليف ${emp.name} بـ: ${task.name}`, true);
+            if (deptEmps.length === 0) {
+                addLog('⚠️ جميع موظفي هذا القسم مشغولون حالياً!', true);
+                return;
+            }
             
-            const targetX = room.x + 50;
-            const targetY = room.y + room.h - 50;
+            const emp = getRandom(deptEmps);
+            emp.isWorking = true;
+            const duration = Math.floor(Math.random() * 15) + 10; // 10 إلى 25 ثانية
+            
+            let taskName = '', icon = '', resultHTML = '', managerNote = '';
+            
+            // توليد النتيجة العشوائية
+            if (dept === 'design') {
+                const type = getRandom(IDEAS.cardTypes);
+                const mat = getRandom(IDEAS.cardMaterials);
+                icon = '🎨';
+                taskName = `تصميم ${type}`;
+                resultHTML = `
+                    <span class="badge">مخرج التصميم</span>
+                    <p><b>المنتج:</b> ${type}</p>
+                    <p><b>المواد:</b> ${mat}</p>
+                    <p><b>الألوان:</b> الذهبي مع الأسود الفاخر.</p>
+                    <p><b>الخط:</b> خط ديواني جلي لاسم العميل.</p>
+                `;
+                managerNote = `"أعجبني اختيار ${mat}، لكن أضف لمسة من اللون الوردي في الزاوية لجذب الانتباه."`;
+            } 
+            else if (dept === 'social') {
+                const theme = getRandom(IDEAS.videoThemes);
+                const music = getRandom(IDEAS.videoMusic);
+                icon = '🎬';
+                taskName = `اختراع فكرة فيديو ريلز`;
+                resultHTML = `
+                    <span class="badge">فيديو Reels (15 ثانية)</span>
+                    <p><b>الفكرة:</b> ${theme}</p>
+                    <p><b>السيناريو:</b> لقطة قريبة (0-4 ث) ← رسم بطيء (4-10 ث) ← النتيجة النهائية (10-15 ث).</p>
+                    <p><b>الموسيقى:</b> ${music}</p>
+                `;
+                managerNote = `"فكرة جيدة جداً. تأكد أن الفيديو يظهر شعار @_olivia.design_ بوضوح في أول ثانية."`;
+            } 
+            else {
+                const item = getRandom(IDEAS.priceItems);
+                const cost = Math.floor(Math.random() * 40) + 15;
+                const profit = Math.floor(cost * 0.6);
+                icon = '💰';
+                taskName = `تسعير ${item}`;
+                resultHTML = `
+                    <span class="badge">تحليل مالي</span>
+                    <p><b>المنتج:</b> ${item}</p>
+                    <p><b>التكلفة:</b> ${cost} د.ل</p>
+                    <p><b>هامش الربح (60%):</b> ${profit} د.ل</p>
+                    <p><b>سعر البيع النهائي:</b> <span style="color:#e94560; font-weight:bold;">${cost + profit} د.ل</span></p>
+                `;
+                managerNote = `"السعر منطقي. أضف خيار 'شحن مجاني' للطلبات فوق 100 د.ل لزيادة المبيعات."`;
+            }
+
+            addLog(`📋 بدأ ${emp.name} مهمة: ${taskName}`, true);
+            
+            const targetX = room.x + 20 + Math.random() * (room.w - 40);
+            const targetY = room.y + room.h - 30;
             
             emp.moveTo(targetX, targetY, () => {
                 emp.workBubble.setVisible(true);
-                emp.workBubbleText.setText(task.icon);
+                emp.workIcon.setText(icon);
+                emp.updateProgress(0);
                 
-                currentTask = { emp, duration, elapsed: 0, task };
-                
-                const pc = document.getElementById('progress-container');
-                const pf = document.getElementById('progress-bar-fill');
-                const pt = document.getElementById('progress-text');
-                pc.style.display = 'block';
-                pt.innerText = `${emp.name}: ${task.act}`;
-                pf.style.width = '0%';
+                const taskObj = { emp, duration, elapsed: 0, taskName, icon, resultHTML, managerNote };
+                activeTasks.push(taskObj);
             });
         }
 
-        function getInstagramAdvice() {
-            const adviceHTML = `
-                <span class="badge">تحليل @_olivia.design_</span>
-                <h4>📊 الوضع الحالي:</h4>
-                <p>حساب يمتلك 224 متابع و 71 منشور. المحتوى ممتاز (خط عربي، مطبوعات، هدايا).</p>
-                <h4>🚀 5 اقتراحات ذهبية للنمو:</h4>
-                <ul>
-                    <li><b>1. تحسين البايو (Bio):</b> اجعليه أوضح: "نصمم بطاقات ومناسبات بخط عربي فاخر | توصيل ليبيا 🇱🇾 | اطلب الآن 👇".</li>
-                    <li><b>2. استخدام الـ Reels:</b> فيديوهات قصيرة (10 ثوانٍ) تظهر عملية تصميم الخط أو تجهيز البوكس. هذا يجلب مئات المتابعين.</li>
-                    <li><b>3. توحيد الألوان:</b> استخدمي فلتر ألوان موحد (بيج/وردي) لجميع الصور حتى تبدو الصفحة كتالوجاً فخماً.</li>
-                    <li><b>4. تفعيل Highlights (القصص):</b> أضيفي أقسام: "الأسعار"، "آراء العملاء"، "كواليس العمل".</li>
-                    <li><b>5. التعاون (Collabs):</b> تواصلي مع منظمي الأعراس أو المصورين في ليبيا لتبادل الترويج.</li>
-                </ul>
-                <h4>📈 توقع النتيجة:</h4>
-                <p>إذا طبقتي هذه الخطوات لمدة شهر، سيزيد التفاعل بنسبة 40% وستصلين لـ 500 متابع حقيقي مهتم بالتصميم.</p>
-            `;
-            showModal("💡 اقتراحات لتحسين حساب الإنستغرام", adviceHTML);
-            addLog("💡 تم عرض اقتراحات تحسين الحساب.", true);
-        }
-
+        // ==== الاجتماع ====
         function callMeeting() {
-            if (!gameScene || currentTask) return;
+            if (!gameScene) return;
             addLog('📢 المديرة Olivia تدعو الجميع لقاعة الاجتماعات...', true);
             employees.forEach(emp => {
                 const m = ROOMS.meeting;
-                emp.moveTo(m.x + 40 + Math.random() * (m.w - 80), m.y + 40 + Math.random() * (m.h - 80), () => {
+                emp.moveTo(m.x + 20 + Math.random() * (m.w - 40), m.y + 30 + Math.random() * (m.h - 60), () => {
                     if (emp.name.includes('Olivia')) {
                         setTimeout(() => {
-                            employees.forEach(e => e.moveTo(e.homeX, e.homeY));
-                            addLog('🔚 انتهى الاجتماع. العودة للمكاتب.');
-                        }, 3000);
+                            addLog('🗣️ مناقشة خطة إنتاج المحتوى للشهر القادم.', false);
+                            setTimeout(() => {
+                                employees.forEach(e => e.moveTo(e.homeX, e.homeY));
+                                addLog('🔚 انتهى الاجتماع. العودة للمكاتب.');
+                            }, 2500);
+                        }, 1500);
                     }
                 });
             });
         }
 
-        function resetSim() { location.reload(); }
+        // ==== تحليل المنافسين ====
+        function analyzeCompetitors() {
+            let compHTML = `<span class="badge">تحليل السوق (Instagram)</span>`;
+            compHTML += `<p style="font-size:12px;">تم تحليل 4 حسابات منافسة في ليبيا:</p>`;
+            
+            IDEAS.competitors.forEach(comp => {
+                compHTML += `
+                    <div style="border:1px solid #ddd; padding:8px; margin-bottom:8px; border-radius:6px; background:#f9f9f9;">
+                        <h4 style="color:#e1306c; margin:0 0 3px 0; font-size:13px;">${comp.name}</h4>
+                        <p style="margin:0; font-size:11px;">👥 المتابعون: <b>${comp.followers.toLocaleString()}</b></p>
+                        <p style="margin:0; font-size:11px;">🎨 التخصص: ${comp.type}</p>
+                        <p style="margin:3px 0 0 0; color:#c0392b; font-size:11px;">⚠️ ضعفهم: ${comp.weakness}</p>
+                    </div>
+                `;
+            });
+            
+            compHTML += `
+                <h4 style="color:#0f3460; margin-top:10px; font-size:13px;">🎯 الفرصة الذهبية لأوليفيا:</h4>
+                <p style="font-size:12px;">دمج الخط العربي الفاخر مع باقات الهدايا سيجعلك الخيار الأول في السوق الليبي.</p>
+            `;
+            
+            addReportToUI("تحليل الحسابات المنافسة", "فريق السوشيال", "🔍", compHTML, `"المنافسة قوية لكننا نمتلك لمسة فنية لا يمتلكونها. ركزوا على الخط العربي."`);
+            addLog("🔍 تم إجراء تحليل شامل للمنافسين.", true);
+        }
 
+        // ==== النصائح ====
+        function getInstagramAdvice() {
+            const adviceHTML = `
+                <span class="badge">خطة نمو @_olivia.design_</span>
+                <p style="font-size:12px;"><b>الوضع الحالي:</b> محتوى بصري قوي، يحتاج لزيادة الوصول (Reach).</p>
+                <ul style="font-size:12px; padding-right:15px;">
+                    <li><b>الهايلايتس:</b> أضيفي "آراء العملاء" و "طريقة الطلب".</li>
+                    <li><b>التفاعل:</b> اطرحي سؤالاً في نهاية كل منشور.</li>
+                    <li><b>التعاون:</b> بث مباشر مع مصور أعراس ليبي.</li>
+                </ul>
+            `;
+            addReportToUI("نصائح لتطوير الحساب", "فريق التسويق", "💡", adviceHTML, `"أتفق تماماً. لنبدأ بتطبيق خاصية الهايلايتس هذا الأسبوع."`);
+            addLog("💡 تم عرض النصائح.", true);
+        }
+
+        // ==== حلقة تحديث المهام ====
         setInterval(() => {
-            if (currentTask) {
-                currentTask.elapsed += 0.1;
-                const percent = Math.min(100, (currentTask.elapsed / currentTask.duration) * 100);
-                document.getElementById('progress-bar-fill').style.width = percent + '%';
+            for (let i = activeTasks.length - 1; i >= 0; i--) {
+                const task = activeTasks[i];
+                task.elapsed += 0.1;
+                const percent = Math.min(100, (task.elapsed / task.duration) * 100);
+                task.emp.updateProgress(percent);
                 
                 if (percent >= 100) {
-                    addLog(`✅ ${currentTask.emp.name} أنهى المهمة بنجاح!`, true);
-                    const emp = currentTask.emp;
-                    emp.workBubble.setVisible(false);
+                    addLog(`✅ ${task.emp.name} أنهى: ${task.taskName}`, true);
+                    task.emp.workBubble.setVisible(false);
+                    task.emp.isWorking = false;
                     
-                    const successBubble = emp.scene.add.text(emp.container.x, emp.container.y - 45, '✅', { fontSize: '22px' }).setOrigin(0.5);
-                    emp.scene.time.delayedCall(1500, () => successBubble.destroy());
-
-                    // إظهار النتيجة في النافذة!
-                    showModal(currentTask.task.title, currentTask.task.result);
-
-                    currentTask = null;
-                    document.getElementById('progress-container').style.display = 'none';
-                    emp.moveTo(emp.homeX, emp.homeY);
+                    // إضافة التقرير للوحة اليسرى
+                    addReportToUI(task.taskName, task.emp.name, task.icon, task.resultHTML, task.managerNote);
+                    
+                    // عودة الموظف
+                    task.emp.moveTo(task.emp.homeX, task.emp.homeY);
+                    activeTasks.splice(i, 1);
                 }
             }
         }, 100);
