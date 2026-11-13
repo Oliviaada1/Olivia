@@ -10,30 +10,25 @@
         body { background-color: #1a1a2e; font-family: 'Segoe UI', Tahoma, sans-serif; color: white; overflow: hidden; }
         
         #game-container { display: flex; height: 100vh; width: 100vw; direction: ltr; }
-        
-        /* منطقة اللعبة */
         #canvas-wrapper { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #0f0f1a; }
         
-        /* لوحة التحكم الجانبية */
-        #sidebar { width: 320px; background: #16213e; padding: 20px; overflow-y: auto; border-left: 3px solid #0f3460; direction: rtl; flex-shrink: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10; }
+        #sidebar { width: 330px; background: #16213e; padding: 20px; overflow-y: auto; border-left: 3px solid #0f3460; direction: rtl; flex-shrink: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 10; }
         
         h2 { color: #e94560; text-align: center; margin-bottom: 15px; font-size: 20px; border-bottom: 2px solid #e94560; padding-bottom: 10px; }
         
         button { width: 100%; padding: 12px; margin-bottom: 10px; background: #0f3460; color: white; border: 2px solid #e94560; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
         button:hover { background: #e94560; transform: translateY(-2px); }
         
-        #log { background: #000; padding: 10px; height: 250px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid #444; margin-top: 15px; }
+        #log { background: #000; padding: 10px; height: 200px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid #444; margin-top: 15px; }
         .log-entry { margin-bottom: 6px; color: #aaa; line-height: 1.4; }
         .log-highlight { color: #f1c40f; font-weight: bold; }
         
-        /* لوحة إنستغرام */
         #instagram-panel { display: none; background: #fff; color: #333; padding: 15px; border-radius: 10px; margin-top: 15px; border: 3px solid #e1306c; text-align: right; }
         #instagram-panel h3 { color: #e1306c; margin-bottom: 10px; text-align: center; }
         .stat { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; border-bottom: 1px dashed #ccc; padding-bottom: 4px; }
         .palette { display: flex; gap: 5px; justify-content: center; margin-top: 10px; }
         .color-box { width: 30px; height: 30px; border-radius: 5px; border: 1px solid #ccc; }
         
-        /* شريط التقدم */
         #progress-container { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 400px; display: none; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 10px; border: 2px solid #f1c40f; z-index: 100; direction: rtl; }
         #progress-text { margin-bottom: 8px; text-align: center; font-weight: bold; color: #f1c40f; }
         #progress-bar-bg { background: #333; height: 20px; border-radius: 10px; overflow: hidden; }
@@ -42,7 +37,6 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- منطقة الرسم -->
         <div id="canvas-wrapper">
             <div id="progress-container">
                 <div id="progress-text">جاري تنفيذ المهمة...</div>
@@ -51,25 +45,26 @@
             <div id="phaser-game"></div>
         </div>
 
-        <!-- لوحة التحكم -->
         <div id="sidebar">
-            <h2>🏢 Olivia Agency</h2>
+            <h2>🎨 Olivia Agency</h2>
             <button onclick="assignTask()">📋 توزيع مهمة جديدة</button>
             <button onclick="callMeeting()">📢 عقد الاجتماع الأسبوعي</button>
             <button onclick="analyzeInstagram()">📸 تحليل @_olivia.design_</button>
             <button onclick="resetSim()" style="background:#c0392b; border-color:#c0392b;">🔄 إعادة التشغيل</button>
 
             <div id="instagram-panel">
-                <h3>📊 تحليل الحساب</h3>
-                <div class="stat"><span>المتابعون:</span><b>12,450</b></div>
-                <div class="stat"><span>معدل التفاعل:</span><b>4.8%</b></div>
-                <div class="stat"><span>أفضل وقت نشر:</span><b>6:00 م</b></div>
-                <div class="stat"><span>نوع المحتوى:</span><b>UI/UX & Branding</b></div>
+                <h3>📊 تحليل @_olivia.design_</h3>
+                <div class="stat"><span>الاسم:</span><b>أوليفيا | مصممة جرافيك</b></div>
+                <div class="stat"><span>المتابعون:</span><b>224</b></div>
+                <div class="stat"><span>المنشورات:</span><b>71</b></div>
+                <div class="stat"><span>المتابَعون:</span><b>91</b></div>
+                <div class="stat"><span>التخصص:</span><b>الخط العربي والمطبوعات</b></div>
+                <div class="stat"><span>الموقع:</span><b>ليبيا 🇱🇾</b></div>
                 <div class="palette">
-                    <div class="color-box" style="background:#D4AF37"></div>
-                    <div class="color-box" style="background:#F5F5DC"></div>
-                    <div class="color-box" style="background:#2C2C2C"></div>
-                    <div class="color-box" style="background:#FFFFFF"></div>
+                    <div class="color-box" style="background:#FADADD" title="وردي فاتح"></div>
+                    <div class="color-box" style="background:#E8DCC4" title="بيج"></div>
+                    <div class="color-box" style="background:#2C2C2C" title="أسود"></div>
+                    <div class="color-box" style="background:#D4AF37" title="ذهبي"></div>
                 </div>
             </div>
 
@@ -79,20 +74,17 @@
     </div>
 
     <script>
-        // إعدادات الشاشة
-        const GAME_WIDTH = window.innerWidth - 320; 
+        const GAME_WIDTH = window.innerWidth - 330; 
         const GAME_HEIGHT = window.innerHeight;
         
-        // الألوان
         const COLORS = [0xe94560, 0x0f3460, 0x16c79a, 0xf1c40f, 0x9b59b6, 0xe67e22];
         
-        // الغرف (تم تكبيرها لتجنب التداخل)
         const ROOMS = {
             manager: { x: 20, y: 20, w: 250, h: 180, name: 'مكتب المديرة', color: 0x2c3e50 },
             design: { x: 300, y: 20, w: 250, h: 180, name: 'قسم التصميم', color: 0x3498db },
             social: { x: 580, y: 20, w: 250, h: 180, name: 'السوشيال ميديا', color: 0xe1306c },
             meeting: { x: 20, y: 230, w: 400, h: 250, name: 'قاعة الاجتماعات', color: 0xe67e22 },
-            marketing: { x: 450, y: 230, w: 380, h: 250, name: 'قسم التسويق', color: 0x16c79a },
+            marketing: { x: 450, y: 230, w: 380, h: 250, name: 'قسم المبيعات والطباعة', color: 0x16c79a },
             lounge: { x: 20, y: 510, w: 810, h: 130, name: 'الاستراحة', color: 0x555555 }
         };
 
@@ -101,7 +93,6 @@
         let managerSprite;
         let currentTask = null;
 
-        // واجهة السجل
         function addLog(msg, highlight = false) {
             const logDiv = document.getElementById('log');
             const entry = document.createElement('div');
@@ -112,7 +103,6 @@
             logDiv.scrollTop = logDiv.scrollHeight;
         }
 
-        // فئة الموظف
         class Employee {
             constructor(scene, x, y, name, dept, color) {
                 this.scene = scene;
@@ -123,21 +113,38 @@
                 this.homeY = y;
                 this.isMoving = false;
                 
-                // رسم الموظف
                 this.container = scene.add.container(x, y);
-                const body = scene.add.circle(0, 0, 12, color);
-                body.setStrokeStyle(2, 0xffffff);
-                const head = scene.add.circle(0, -10, 6, 0xffdbac);
-                head.setStrokeStyle(1, 0x000000);
-                const label = scene.add.text(0, 18, name, { fontSize: '9px', color: '#fff', fontStyle: 'bold', backgroundColor: 'rgba(0,0,0,0.5)', padding: {x:2, y:2} }).setOrigin(0.5);
                 
-                this.container.add([body, head, label]);
+                // جسم الموظف (احترافي)
+                const body = scene.add.rectangle(0, 0, 18, 22, color);
+                body.setStrokeStyle(2, 0x000000);
+                
+                // الرأس
+                const head = scene.add.circle(0, -18, 9, 0xffdbac);
+                head.setStrokeStyle(2, 0x000000);
+                
+                // الشعر
+                const hair = scene.add.rectangle(0, -25, 18, 8, 0x2C2C2C);
+                hair.setStrokeStyle(1, 0x000000);
+                
+                // الاسم
+                const label = scene.add.text(0, 30, name, { fontSize: '10px', color: '#fff', fontStyle: 'bold', backgroundColor: 'rgba(0,0,0,0.7)', padding: {x:4, y:2} }).setOrigin(0.5);
+                
+                this.container.add([body, head, hair, label]);
                 scene.physics.add.existing(this.container);
-                this.container.body.setCircle(12);
+                this.container.body.setSize(22, 32);
                 this.container.body.setCollideWorldBounds(true);
                 
                 this.target = null;
                 this.callback = null;
+                
+                // فقاعة العمل
+                this.workBubble = scene.add.container(x, y - 45);
+                this.workBubble.setVisible(false);
+                const bubbleBg = scene.add.circle(0, 0, 16, 0xffffff);
+                bubbleBg.setStrokeStyle(2, 0x000000);
+                this.workBubbleText = scene.add.text(0, 0, '...', { fontSize: '14px', color: '#000' }).setOrigin(0.5);
+                this.workBubble.add([bubbleBg, this.workBubbleText]);
             }
 
             moveTo(targetX, targetY, callback) {
@@ -147,6 +154,11 @@
             }
 
             update(speed = 120) {
+                if (this.workBubble.visible) {
+                    this.workBubble.x = this.container.x;
+                    this.workBubble.y = this.container.y - 45;
+                }
+
                 if (!this.isMoving || !this.target) return;
                 
                 const dx = this.target.x - this.container.x;
@@ -167,7 +179,6 @@
             }
         }
 
-        // المشهد الرئيسي
         class MainScene extends Phaser.Scene {
             constructor() { super('MainScene'); }
 
@@ -175,7 +186,6 @@
                 gameScene = this;
                 this.cameras.main.setBackgroundColor('#1a1a2e');
 
-                // رسم الغرف
                 Object.keys(ROOMS).forEach(key => {
                     const r = ROOMS[key];
                     const rect = this.add.rectangle(r.x + r.w/2, r.y + r.h/2, r.w, r.h, r.color, 0.2);
@@ -183,33 +193,28 @@
                     this.add.text(r.x + 10, r.y + 10, r.name, { fontSize: '14px', color: '#fff', fontStyle: 'bold' });
                 });
 
-                // رسم مكتب المديرة
+                // مكتب المديرة
                 const m = ROOMS.manager;
-                this.add.rectangle(m.x + 80, m.y + 120, 100, 40, 0x8B4513).setStrokeStyle(2, 0x000000); // مكتب
-                this.add.circle(m.x + 80, m.y + 90, 15, 0x000000); // كرسي
-                this.add.rectangle(m.x + 125, m.y + 180, 40, 4, 0x88ccff, 0.6); // زجاج
+                this.add.rectangle(m.x + 80, m.y + 120, 100, 40, 0x8B4513).setStrokeStyle(2, 0x000000);
+                this.add.circle(m.x + 80, m.y + 90, 15, 0x000000);
                 this.add.text(m.x + 80, m.y + 145, 'Olivia', { fontSize: '11px', color: '#f1c40f', fontStyle: 'bold' }).setOrigin(0.5);
 
-                // المديرة
                 managerSprite = new Employee(this, m.x + 80, m.y + 90, 'Olivia 👑', 'manager', 0xf1c40f);
                 employees.push(managerSprite);
 
-                // الموظفون
                 const depts = ['design', 'social', 'marketing'];
                 const names = ['أحمد','سارة','محمد','نورة','خالد','مريم','علي','فاطمة','يوسف','ليلى','راشد','هند','عمر','دانة','سلمان','شهد','طلال','ريم','بدر','لمى','ناصر','منى','تركي','جواهر','سعد','عبير','ماجد','أمل','فيصل','عبير'];
                 
                 for (let i = 0; i < 30; i++) {
                     const dept = depts[i % 3];
                     const room = ROOMS[dept];
-                    // توزيع عشوائي أوسع لتجنب التداخل
                     const x = room.x + 40 + Math.random() * (room.w - 80);
                     const y = room.y + 50 + Math.random() * (room.h - 100);
                     const emp = new Employee(this, x, y, names[i], dept, COLORS[i % COLORS.length]);
                     employees.push(emp);
                 }
 
-                addLog('✅ تم توظيف 31 شخصاً (شامل المديرة).', true);
-                addLog('📌 الموظفون يتوزعون في مكاتبهم.');
+                addLog('✅ تم بدء محاكاة شركة أوليفيا.', true);
             }
 
             update() {
@@ -217,7 +222,6 @@
             }
         }
 
-        // تشغيل اللعبة
         const config = {
             type: Phaser.AUTO,
             width: GAME_WIDTH,
@@ -228,38 +232,51 @@
         };
         const game = new Phaser.Game(config);
 
-        // ==== التفاعل ====
+        // ==== المهام المخصصة لحساب أوليفيا ====
         function assignTask() {
             if (!gameScene || currentTask) return;
             
-            const depts = ['design', 'social', 'marketing'];
-            const dept = depts[Math.floor(Math.random() * depts.length)];
-            const room = ROOMS[dept];
-            const deptEmps = employees.filter(e => e.dept === dept);
+            const tasks = [
+                { dept: 'design', name: 'تصميم بطاقة تخرج', act: 'جاري اختيار الألوان والخطوط...', icon: '🎓' },
+                { dept: 'design', name: 'تصميم لوحة خط عربي', act: 'جاري رسم الحروف...', icon: '🖋️' },
+                { dept: 'marketing', name: 'تجهيز باقة ورد وتغليف', act: 'جاري تنسيق الباقة...', icon: '💐' },
+                { dept: 'marketing', name: 'طباعة بطاقات مناسبات', act: 'جاري ضبط إعدادات الماكينة...', icon: '🖨️' },
+                { dept: 'social', name: 'تصوير منتج للإنستغرام', act: 'جاري ضبط الإضاءة...', icon: '📸' },
+                { dept: 'social', name: 'جدولة منشورات الأسبوع', act: 'جاري كتابة الوصف...', icon: '📱' },
+                { dept: 'design', name: 'تصميم باقة زفاف', act: 'جاري انتقاء الورق الفاخر...', icon: '💍' }
+            ];
+            
+            const task = tasks[Math.floor(Math.random() * tasks.length)];
+            const room = ROOMS[task.dept];
+            const deptEmps = employees.filter(e => e.dept === task.dept);
             
             if (deptEmps.length === 0) return;
             
             const emp = deptEmps[Math.floor(Math.random() * deptEmps.length)];
-            const duration = Math.floor(Math.random() * 20) + 10;
-            const taskName = dept === 'design' ? 'تصميم هوية بصرية' : dept === 'social' ? 'جدولة منشورات' : 'حملة إعلانية';
+            const duration = Math.floor(Math.random() * 10) + 8; 
             
-            addLog(`📋 تم تكليف ${emp.name} بمهمة: ${taskName} (${duration} ثانية)`, true);
+            addLog(`📋 تم تكليف ${emp.name} بمهمة: ${task.name}`, true);
             
             const targetX = room.x + 50;
             const targetY = room.y + room.h - 50;
+            
             emp.moveTo(targetX, targetY, () => {
-                currentTask = { emp, duration, elapsed: 0, name: taskName };
+                emp.workBubble.setVisible(true);
+                emp.workBubbleText.setText(task.icon);
+                
+                currentTask = { emp, duration, elapsed: 0, task, targetX, targetY };
+                
                 const pc = document.getElementById('progress-container');
                 const pf = document.getElementById('progress-bar-fill');
                 const pt = document.getElementById('progress-text');
                 pc.style.display = 'block';
-                pt.innerText = `${emp.name} ينفذ: ${taskName} (${duration} ث)`;
+                pt.innerText = `${emp.name}: ${task.act}`;
                 pf.style.width = '0%';
             });
         }
 
         function callMeeting() {
-            if (!gameScene) return;
+            if (!gameScene || currentTask) return;
             addLog('📢 المديرة Olivia تدعو الجميع لقاعة الاجتماعات...', true);
             
             employees.forEach(emp => {
@@ -268,9 +285,9 @@
                 const ty = m.y + 40 + Math.random() * (m.h - 80);
                 emp.moveTo(tx, ty, () => {
                     if (emp.name.includes('Olivia')) {
-                        addLog('✅ الجميع في قاعة الاجتماعات. بدء الاجتماع.', true);
+                        addLog('✅ الجميع في القاعة. بدء الاجتماع.', true);
                         setTimeout(() => {
-                            addLog('🗣️ مناقشة SWOT: قوة في التصميم، ضعف في الميزانية.', false);
+                            addLog('🗣️ مناقشة خطة إنتاج المحتوى للشهر القادم.', false);
                             setTimeout(() => {
                                 addLog('🔚 انتهى الاجتماع. العودة للمكاتب.');
                                 employees.forEach(e => e.moveTo(e.homeX, e.homeY));
@@ -282,7 +299,7 @@
         }
 
         function analyzeInstagram() {
-            if (!gameScene) return;
+            if (!gameScene || currentTask) return;
             addLog('📸 جاري دراسة حساب @_olivia.design_...', true);
             addLog('👥 فريق السوشيال ميديا والمديرة يتوجهون للاجتماع.', true);
             
@@ -300,7 +317,7 @@
             const pt = document.getElementById('progress-text');
             pc.style.display = 'block';
             pf.style.width = '0%';
-            pt.innerText = 'جاري تحليل الحساب...';
+            pt.innerText = 'جاري تحليل بيانات الحساب...';
             
             let progress = 0;
             const interval = setInterval(() => {
@@ -310,7 +327,7 @@
                     clearInterval(interval);
                     pt.innerText = '✅ اكتمل التحليل!';
                     document.getElementById('instagram-panel').style.display = 'block';
-                    addLog('✅ اكتمل تحليل @_olivia.design_: 12.4K متابع، تفاعل 4.8%.', true);
+                    addLog('✅ اكتمل تحليل الحساب.', true);
                     setTimeout(() => { pc.style.display = 'none'; }, 2000);
                 }
             }, 100);
@@ -318,7 +335,7 @@
 
         function resetSim() { location.reload(); }
 
-        // تحديث شريط التقدم
+        // تحديث شريط التقدم والفقاعات
         setInterval(() => {
             if (currentTask) {
                 currentTask.elapsed += 0.1;
@@ -326,8 +343,15 @@
                 document.getElementById('progress-bar-fill').style.width = percent + '%';
                 
                 if (percent >= 100) {
-                    addLog(`✅ ${currentTask.emp.name} أنهى مهمة: ${currentTask.name}`, true);
+                    addLog(`✅ ${currentTask.emp.name} أنهى مهمة: ${currentTask.task.name}`, true);
+                    
                     const emp = currentTask.emp;
+                    emp.workBubble.setVisible(false);
+                    
+                    // تأثير النجاح
+                    const successBubble = emp.scene.add.text(emp.container.x, emp.container.y - 45, '✅', { fontSize: '22px' }).setOrigin(0.5);
+                    emp.scene.time.delayedCall(1500, () => successBubble.destroy());
+
                     currentTask = null;
                     document.getElementById('progress-container').style.display = 'none';
                     emp.moveTo(emp.homeX, emp.homeY);
